@@ -1,8 +1,12 @@
 {% extends "base.html" %}
 {% from "macros.html" import render_card, render_form, reload_button %}
 {% block content %}
-{% call render_card("Bureau de vote") %}
+{% call render_card("Page administrateur") %}
 <h2> code d'accès : <code> {{ this.key }} </code> </h2>
+{{ reload_button() }}
+<a href="{{ url_for('vote',key=this.key) }}">
+<button class="w3-btn w3-hover w3-indigo w3-padding">Rejoindre</button>
+</a>
 {% endcall %}
 {% call render_card("Nouveau vote") %}
 <div class="w3-container">
@@ -39,7 +43,6 @@
   <input type="hidden" name="index" value="{{index}}">
   <input type="hidden" name="admin_key" value="{{this.admin_key}}">
   {{ vote.results() }}
-  <p>{{ reload_button() }}</p>
   {% endcall %}
   {% endif %}
   {% endcall %}
