@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% from "macros.html" import render_card, render_form, reload_button %}
+{% block content %}
+{% call render_card("Bureau de vote") %}
+<h2> code d'accès : <code> {{ this.key }} </code> </h2>
+{% endcall %}
+{% call render_card("Nouveau vote") %}
+<div class="w3-container">
+  <div class="w3-bar w3-border w3-light-gray">
+  {% for type in this.types %}
+  <button class="tab-button w3-bar-item w3-button {{ 'w3-indigo' if loop.index0 == 0}}"
+      onclick='selectTab(event,"{{type.name}}")'>{{type.name}}</button>
+  {% endfor %}
+  </div>
+  {% for type in this.types %}
+  <div id="{{type.name}}" class="tab" {% if loop.index0 %} style="display:none" {% endif %}>
+    {% call render_form(endpoint="api_new",submit="Lancer le vote",uid="new-%d"%loop.index0) %}
+    <input type="hidden" name="type" value="{{loop.index0}}">
+   {{ type.create() }}
+    <p> <label>
+        publier automatiquement après <input type="number" min=0 max=100 name="autopublish"> votes
+    </label> </p>
+    <input type="hidden" name="admin_key" value="{{this.admin_key}}">
+    <input type="hidden" name="key" value="{{this.key}}">
+   {% endcall %}
+  </div>
+  {% endfor %}
+</div>
+{% endcall %}
+
+{% for vote in this[::-1] %}
+  {% set index = loop.revindex0 %}
+  {% call render_card("Vote %d"%(index+1)) %}
+  {% if vote.published %}
+  {{ vote.results() }}
+  {% else %}
+  {% call render_form(endpoint="api_publish",submit="Publier les votes",uid="pub-%d"%index) %}
+  <input type="hidden" name="key" value="{{this.key}}">
+  <input type="hidden" name="index" value="{{index}}">
+  <input type="hidden" name="admin_key" value="{{this.admin_key}}">
+  {{ vote.results() }}
+  <p>{{ reload_button() }}</p>
+  {% endcall %}
+  {% endif %}
+  {% endcall %}
+{% endfor %}
+{% endblock %}

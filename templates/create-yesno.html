@@ -1,0 +1,11 @@
+<p>
+<label>
+<input type="text" name="text" value="" placeholder="question ?">
+(si nécessaire)
+</label>
+</p>
+<ul>
+    {% for option in this._options %}
+    <li><input type="text" name="{{ loop.index0 }}" value="{{ option }}"></li>
+    {% endfor %}
+</ul>

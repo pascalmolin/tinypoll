@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% from "macros.html" import render_card, render_form, reload_button %}
+{% block content %}
+  {% if this|length == 0 %}
+     {% call render_card("Aucun vote en cours") %}
+     <p> Rafraichir la page après lancement d'un vote. </p>
+     {% endcall %}
+  {% endif %}
+  {% for vote in this[::-1] %}
+  {% set index = loop.revindex0 %}
+  {% call render_card("Vote %d"%(index+1)) %}
+  {% if vote.published %}
+  {{ vote.results() }}
+  {% elif index not in history %}
+  {% call render_form(endpoint="api_submit",submit="Envoyer",uid="sub-%d"%index) %}
+  <input type="hidden" name="index" value="{{index}}">
+  <input type="hidden" name="key" value="{{this.key}}">
+  {{ vote.form() }}
+  {% endcall %}
+  {% else %}
+    <p> en attente des résultats </p>
+    <p>{{ reload_button() }}</p>
+  {% endif %}
+  {% endcall %}
+  {% endfor %}
+{% endblock %}

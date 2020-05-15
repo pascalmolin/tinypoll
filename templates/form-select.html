@@ -1,0 +1,10 @@
+{% if this.text %}<p> {{ this.text }} </p>{% endif %}
+<ul class="w3-ul w3-border">
+    {%- for label in this.options %}
+    <li class="select">
+        <label>
+        <input type="checkbox" name="choice" value="{{ loop.index0 }}">
+        {{ label }}</label>
+    </li>
+    {%- endfor %}
+</ul>

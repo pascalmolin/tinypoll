@@ -1,0 +1,27 @@
+{% macro render_card(title) %}
+<section class="w3-display-container w3-card-4 w3-margin-top"> 
+    <div class="w3-container w3-indigo">
+        <h2>{{ title }}</h2>
+    </div>
+    <div class="w3-container">
+        {{ caller() }}
+    </div>
+</section>
+{% endmacro %}
+{% macro render_form(endpoint="api_submit", submit="Envoyer", uid=0, method="post") %}
+<form class="w3-container" action="{{ url_for(endpoint) }}" method="{{ method }}">
+    {% if endpoint=="api_submit" %}
+    <p> 
+    <input type="text" id="sha-{{uid}}" class="uid-sha" name="sha" value="" size="24">
+    <label for="sha-{{uid}}"> identifiant </label>
+    </p>
+    {% endif %}
+    {{ caller() }}
+    <button type="submit" class="w3-btn w3-hover w3-indigo w3-padding">
+        {{ submit }}
+    </button>
+</form>
+{% endmacro %}
+{% macro reload_button() %}
+<button class="w3-btn w3-hover w3-indigo w3-padding" onClick="window.location.reload();">Recharger</button>
+{% endmacro %}

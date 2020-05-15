@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% from "macros.html" import render_card, render_form %}
+{% block content %}
+
+  {% call render_card("Rejoindre un bureau de vote") %}
+  {% call render_form(endpoint="vote",submit="Rejoindre",uid="join",method="get") %}
+  <p> <label>
+  <input type="text" name="key" value="">
+  clé d'accès
+  </label> </p>
+  {% endcall %}
+  {% endcall %}
+  {% call render_card("Créer un nouveau bureau") %}
+  {% call render_form(endpoint="api_create",submit="Créer",uid="create") %}
+  <p> <label>
+  <input type="text" data-format="xxxx-xxxx-xxxx-xxxx" class="uid-sha" size=20 name="admin_key" value="">
+  clé administrateur
+  </label> </p>
+  <p> <label>
+  <input type="text" data-format="xxxx-xxxx" class="uid-sha" size=10 name="key" value="">
+  clé d'accès
+  </label> </p>
+  {% endcall %}
+  {% endcall %}
+{% endblock %}

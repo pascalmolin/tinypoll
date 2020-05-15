@@ -1,0 +1,14 @@
+<ul>
+    {% for c,option in this.counts() %}
+    <li> {{ c }} : {{ option }} </li>
+    {% endfor %}
+</ul>
+<div>
+    <ul>
+    {% for k,v in this.items() %}
+    <li> {{ v }} : {{ k }} </li>
+    {#<li> {% for i in v %}{{ this.options[i] }}{% endfor %} : {{ k }} </li>#}
+    {% endfor %}
+    </li>
+</div>
+

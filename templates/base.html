@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>TinyVote</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
+<link rel="stylesheet" href="/static/w3.css">
+{% block extralinks %}
+{% endblock %}
+{% block style %}
+{% endblock style %}
+{% block script %}
+<script type="text/javascript">
+function uuidv4(format) {
+    if (format == undefined)
+      format = 'xxxx-xxxx-4xxx-yxxx-xxxx';
+    return format.replace(/[xy]/g,
+    function(c) {
+    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16); }
+    );
+}
+function selectTab(evt,id) {
+    [].forEach.call(document.getElementsByClassName("tab"),
+        x=>x.style.display = "none" );
+    [].forEach.call(document.getElementsByClassName("tab-button"),
+        x=>x.className=x.className.replace(" w3-indigo", "") );
+    document.getElementById(id).style.display = "block";
+    evt.currentTarget.className += " w3-indigo";
+}
+function generateSha() {
+    [].forEach.call(document.getElementsByClassName("uid-sha"),
+        function (x) { x.value = uuidv4(x.dataset.format);} ) }
+</script>
+{% endblock script %}
+</head>
+<body class="w3-content w3-margin-top" style="max-width:500px">
+    <a href="/">Page principale</a>
+    {%- block messages -%}
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+    {%- endblock messages -%}
+    {%- block content %}
+    {%- endblock content %}
+    {%- block footer %}
+    <p style="font-size: smaller;">
+    Copyright 2020 Pascal Molin.
+    Cette application de sondage ne fournit absolument aucune garantie
+    de confidentialité. Vous l'utilisez à vos risques et périls.
+    </p>
+    {%- endblock footer %}
+</body>
+<script type="text/javascript">generateSha()</script>
+</html>

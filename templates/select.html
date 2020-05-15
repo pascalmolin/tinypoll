@@ -1,0 +1,15 @@
+<p> {{ this.text }} </p>
+{% if this.image %}
+<img src="{{ url_for('api_images',filename=this.image) }}"
+     style="display: block; max-width: 100%; margin: auto;">
+{% endif %}
+<ul class="w3-ul w3-border">
+    {%- for choice, selected in content %}
+    <li class="checkbox"> {%- set id = loop.index0 %}
+        <input type="checkbox" name="{{ hash }}" id="{{ id }}" value="{{ id }}"
+                 {%- if selected %} checked {% endif -%}
+                 {%- if question.disabled %} disabled {% endif %}>
+        <label for="{{ id }}">{{ choice }}</label>
+    </li>
+    {%- endfor %}
+</ul>
