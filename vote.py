@@ -75,7 +75,7 @@ class PollStation(list):
         self.key = key
         self.admin_key = admin_key
     def new(self, form):
-        if len(self) > limit:
+        if len(self) > self.limit:
             return
         if form.get('admin_key') == self.admin_key:
             i = form.get('type',type=int)
