@@ -4,7 +4,7 @@ from flask import Flask, request, render_template, session, redirect, url_for, s
 from markupsafe import Markup
 from functools import wraps
 
-app = Flask('quiz')
+app = Flask(__name__)
 app.secret_key = "idontcaresecuresession"
 
 class Vote(dict):
@@ -69,11 +69,14 @@ class SELECT(Vote):
 class PollStation(list):
     """ as expected """
     types = [YesNo, ABC, ABCD, SELECT]
+    limit = 1000
     def __init__(self, key, admin_key):
         super().__init__()
         self.key = key
         self.admin_key = admin_key
     def new(self, form):
+        if len(self) > limit:
+            return
         if form.get('admin_key') == self.admin_key:
             i = form.get('type',type=int)
             self.append(self.types[i](form))
@@ -94,12 +97,15 @@ class PollStation(list):
             self.publish(form)
  
 class VoteApp(dict):
+    limit = 1000
 
     def create(self, form):
+        if len(self) > self.limit:
+            return render_template('illegal.html')
         admin_key = form.get('admin_key',type=str)
         key = form.get('key',type=str)
         if key in self:
-            return render_template('illegal.html');
+            return render_template('illegal.html')
         self[key] = PollStation(key,admin_key)
         return self[key]
     def request(self, request):
@@ -113,7 +119,7 @@ class VoteApp(dict):
         def decorated(*args,**kwargs):
             votes = self.request(request)
             if votes is None:
-                return render_template('illegal.html');
+                return render_template('illegal.html')
             return f(votes,*args,**kwargs)
         return decorated
     def admin_access(self, f):
