@@ -1,11 +1,13 @@
 <p>
 <label>
-<input type="text" name="text" value="" placeholder="question ?">
+<input class="w3-input" type="text" name="text" value="" placeholder="question ?">
 (si nécessaire)
 </label>
 </p>
-<ul>
+<ul class="">
     {% for option in this._options %}
-    <li><input type="text" name="{{ loop.index0 }}" value="{{ option }}"></li>
+    <li>{#<label> option {{ loop.index }} </label>#}
+        <input class="w3-input" type="text" name="{{ loop.index0 }}" value="{{ option }}">
+    </li>
     {% endfor %}
 </ul>

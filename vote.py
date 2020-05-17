@@ -62,7 +62,6 @@ class SELECT(Vote):
             self.published = True
     def counts(self):
         counts = list(zip(self.choices,self.options)) 
-        print(sorted(counts))
         counts.sort()
         return counts
 
@@ -70,16 +69,21 @@ class PollStation(list):
     """ as expected """
     types = [YesNo, ABC, ABCD, SELECT]
     limit = 1000
-    def __init__(self, key, admin_key):
+    options_defaults = [ ('anonymous','anonymiser les votes'),
+                ('details',  'afficher le resultat des votes'),
+                ('votants',  'liste des votants') ]
+    def __init__(self, key, admin_key, form):
         super().__init__()
         self.key = key
         self.admin_key = admin_key
+        self.number = form.get('number',0,type=int)
     def new(self, form):
         if len(self) > self.limit:
             return
-        if form.get('admin_key') == self.admin_key:
-            i = form.get('type',type=int)
-            self.append(self.types[i](form))
+        if form.get('admin_key') != self.admin_key:
+            return
+        i = form.get('type',type=int)
+        self.append(self.types[i](form))
     def publish(self, form):
         if form.get('admin_key') == self.admin_key:
             i = form.get('index',type=int)
@@ -101,12 +105,12 @@ class VoteApp(dict):
 
     def create(self, form):
         if len(self) > self.limit:
-            return render_template('illegal.html')
+            return None
         admin_key = form.get('admin_key',type=str)
         key = form.get('key',type=str)
         if key in self:
-            return render_template('illegal.html')
-        self[key] = PollStation(key,admin_key)
+            return None
+        self[key] = PollStation(key,admin_key,form)
         return self[key]
     def request(self, request):
         if 'key' in request.form:
@@ -144,6 +148,8 @@ def index():
 @app.route('/create', methods = ['GET','POST'])
 def api_create():
     votes = db.create(request.form)
+    if votes is None:
+        render_template("illegal.html")
     return redirect(url_for('admin',key=votes.key,admin_key=votes.admin_key))
 
 @app.route('/vote', methods = ['GET'])

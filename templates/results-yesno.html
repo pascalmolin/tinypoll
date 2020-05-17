@@ -1,8 +1,16 @@
 {% if this.text %} <p> {{ this.text }} </p> {% endif %}
 <ul class="w3-ul w3-border">
+    {%- set total = this.choices|sum %}
     {%- for label in this.options %}
-    <li class="radio">
-        {{ label }} : {{ this.choices[loop.index0] }}
+    {% set count = this.choices[loop.index0] %}
+    {#
+    {% set width = count*100/total if total else 0 %}
+    <li> <div class="w3-light-grey">
+            <div class="w3-container w3-indigo w3-center" style="width:{{width}}%"> {{count}} </div>
+    </div> </li>
+    #}
+    <li>
+        {{ label }} : {{ count }}
     </li>
     {%- endfor %}
 </ul>

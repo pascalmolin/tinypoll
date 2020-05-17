@@ -2,24 +2,35 @@
 {% from "macros.html" import render_card, render_form %}
 {% block content %}
 
-  {% call render_card("Rejoindre un bureau de vote") %}
+  {% call render_card("Rejoindre un vote") %}
   {% call render_form(endpoint="vote",submit="Rejoindre",uid="join",method="get") %}
   <p> <label>
-  <input type="text" name="key" value="">
   clé d'accès
+  <input class="w3-input w3-border" type="text" name="key" value="">
   </label> </p>
   {% endcall %}
   {% endcall %}
-  {% call render_card("Créer un nouveau bureau") %}
+  {% call render_card("Administrer un vote") %}
   {% call render_form(endpoint="api_create",submit="Créer",uid="create") %}
   <p> <label>
-  <input type="text" data-format="xxxx-xxxx-xxxx-xxxx" class="uid-sha" size=20 name="admin_key" value="">
   clé administrateur
+  <input class="w3-input w3-border uid-sha" type="text" data-format="xxxx-xxxx-xxxx-xxxx" size=20 name="admin_key" value="">
   </label> </p>
   <p> <label>
-  <input type="text" data-format="xxxx-xxxx" class="uid-sha" size=10 name="key" value="">
   clé d'accès
+  <input class="w3-input w3-border uid-sha" type="text" data-format="xxxx-xxxx" size=10 name="key" value="">
   </label> </p>
+  <h4>Options</h4>
+  <p> <label>
+  <input type="number" min=0 max=1000 size=3 name="number" value=""> nombre de votants
+  </label> </p>
+  {#
+  <ul class="w3-ul">
+      {% for option in ['anonymous','show votes'] %}
+      <li class="radio"> <label> <input type="checkbox" name="{{ option }}"> </label> {{ option }} </li>
+      {% endfor %}
+  </ul>
+  #}
   {% endcall %}
   {% endcall %}
 {% endblock %}

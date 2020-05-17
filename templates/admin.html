@@ -22,7 +22,9 @@
     <input type="hidden" name="type" value="{{loop.index0}}">
    {{ type.create() }}
     <p> <label>
-        publier automatiquement après <input type="number" min=0 max=100 name="autopublish"> votes
+        publier automatiquement après
+        <input type="number" min=0 max=100 name="autopublish"
+          {%- if this.number %} value="{{ this.number }}"{% endif %}> votes
     </label> </p>
     <input type="hidden" name="admin_key" value="{{this.admin_key}}">
     <input type="hidden" name="key" value="{{this.key}}">
