@@ -11,6 +11,7 @@ class Vote(dict):
     """ id -> choice """
     template = None
     def __init__(self,form):
+        self.text = form.get('text','',type=str)
         self.autopublish = form.get('autopublish',0,type=int)
         self.published = False
     def form(self):
